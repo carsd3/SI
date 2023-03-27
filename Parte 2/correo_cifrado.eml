@@ -1,0 +1,178 @@
+Delivered-To: littleguitar2001@gmail.com
+Received: by 2002:a05:7010:2da0:b0:33a:938e:fdbd with SMTP id fu32csp2246mdb;
+        Thu, 23 Mar 2023 09:09:50 -0700 (PDT)
+X-Received: by 2002:a1c:f619:0:b0:3ed:514d:e07f with SMTP id w25-20020a1cf619000000b003ed514de07fmr159187wmc.3.1679587790648;
+        Thu, 23 Mar 2023 09:09:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679587790; cv=none;
+        d=google.com; s=arc-20160816;
+        b=0Wfvyye0W8+V53/e4Rn1udD63QBFtsZ/mWjWHHw1TbptstpdM0dRvKMLgUcO1kZ/iw
+         VjMUE1MZfLW/RXrhArp6kjTi5UEDxZkvT8C0cR1CPl7CHQs/uBlm+U8inGzPG3rZ4dJC
+         oyBYgplzj6JZUOlsSyCFZ7nADkiNL7uuWvMWPaFznJX135unGYCTPw8ExY1v/VmIi7W0
+         67mivJdaLElmpWQ7mOJY5aIjtB8Z7QzAahyYEJkjc3e4DYxjmRQxC/ZdODq1rhtNvfIR
+         1L5AmqY9c+hLvCtVHW/ArWYOI6X5X8a6RJkhcUdYwia8MoGQmXAB5EHxJitpuam0HWrk
+         J2PQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-description:content-disposition:content-transfer-encoding
+         :subject:from:to:content-language:user-agent:mime-version:date
+         :message-id:dkim-signature;
+        bh=GyHaHdc/Xb71GMMkvHivQuqjbw7BpM2ySZEFyEqLvNg=;
+        b=KH6v9BWJXRrX2chIIh9yblsYnFFXrA4y9v7FivAFE2ao0SXeGiqRSCMGr2uolG0vQt
+         8WkOCicUw6rj3VLf+YZEdLWhDLzixeRL5ZscJAzHb3rPWC25JJYGkf5NZg8EGeSiDp1n
+         VwB6q/uI5Yc/7YeoiFk/auifTphXk6JfBjwOF4mrdllWuSI1m1az3G5AMK6JMGpSE4wk
+         yGxCX07aiT7HMO+Hr4k0c4b48o7aT6ydOif7QikEY0UBKNy7MOVJM0+xoTSsdUeQS3HI
+         9aJzDcqo6yenGb5Z7XiLR8r80EYlQlraaJYZ2wm2NlasAjepF2buI9HlEBiVlcudXuL+
+         4WaQ==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20210112 header.b=CuY09B1z;
+       spf=pass (google.com: domain of javids.jd@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=javids.jd@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com
+Return-Path: <javids.jd@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id l3-20020a7bc343000000b003ee66849c2fsor657071wmj.42.2023.03.23.09.09.50
+        for <littleguitar2001@gmail.com>
+        (Google Transport Security);
+        Thu, 23 Mar 2023 09:09:50 -0700 (PDT)
+Received-SPF: pass (google.com: domain of javids.jd@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20210112 header.b=CuY09B1z;
+       spf=pass (google.com: domain of javids.jd@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=javids.jd@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679587790;
+        h=content-description:content-disposition:content-transfer-encoding
+         :subject:from:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GyHaHdc/Xb71GMMkvHivQuqjbw7BpM2ySZEFyEqLvNg=;
+        b=CuY09B1zip1w3H6MlO251eQzZx+AUK148L9LQgWVp07c8T826i4PdhEkoPgGOfHPsZ
+         gr7c4GgJVwt5xsR5/pZLVqmwLhlnqOVYTymhlIXm/BVtj1m+SVMpTONUXYPOQJOO7ni4
+         4wmBXWPhgXGWRe562+ApDNIJiUf/Oxz/YWK1EBtr0Q7pDXDdnMfhta2g5G+usAIwxxpa
+         YHnoal2cZ5ldpT4x5F8C3wnKTSZQcUlLNWAMI4MGu3FdHS8MpC4RlhdhybNT3JJWynAV
+         cNg4jfcnuScEFRmydpni2cumB39imjzO/s7XRprUkwQEhlQOHfeycRAyNmMOn67VfgDf
+         JTTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679587790;
+        h=content-description:content-disposition:content-transfer-encoding
+         :subject:from:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GyHaHdc/Xb71GMMkvHivQuqjbw7BpM2ySZEFyEqLvNg=;
+        b=nVR6yFdf5y+ayxmaU8C0SgAtM24LEWxErf6aDL5/y9MuUMtXBEX26PD8c3WN7+2G1U
+         5K78EByt1fCUWNiBy4RmIl1SMgzZUofaHhxyCPdX6gjMD3aJHZ5i3EfZGGZ8C/RJzjzq
+         YUhEmrJ4W4Kh5gt8EMbQcx+AGYAJEknEfai/u125sKAgvM1z7YkUhxe/AlKfwCOHR8tt
+         mOMy3IUWq3fmILd0bRY/rXYAzK5hJll5oDJ3rQaoR4mGBFFuWGjtls4BfMOuNy/C2NZQ
+         mHish41AqfvXJs43s17+ZypQF5+y310LHzcCF2vRnF/GWSqGFV6kEHALkSA6ReaS1cEt
+         GdBQ==
+X-Gm-Message-State: AO0yUKUWCloZkIOUkL5oKT4TqDom0SwYwfYH6PYZ8FCMW0mK/R0RhYml
+	NgGXSefOlkqDqwyEW3nj/bWf+fC4OXSjEQ==
+X-Google-Smtp-Source: AK7set+I7Zgs6gS+Kg0hfJD8T7UyzTuXvLkmYtt/xN5Vg/ySuYkQpbC6Xi8LT9G7kwyaOu9YJv1ZdQ==
+X-Received: by 2002:a05:600c:d5:b0:3ed:2eb5:c2dd with SMTP id u21-20020a05600c00d500b003ed2eb5c2ddmr82766wmm.39.1679587790112;
+        Thu, 23 Mar 2023 09:09:50 -0700 (PDT)
+Return-Path: <javids.jd@gmail.com>
+Received: from [10.195.48.172] ([193.145.130.30])
+        by smtp.gmail.com with ESMTPSA id v21-20020a05600c445500b003ee91eda67bsm1837783wmn.12.2023.03.23.09.09.49
+        for <littleguitar2001@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 09:09:49 -0700 (PDT)
+Message-ID: <4fad3621-1dcb-2d26-4ab9-cfb76f09e0e9@gmail.com>
+Date: Thu, 23 Mar 2023 16:09:31 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: es-ES
+To: littleguitar2001@gmail.com
+From: Francisco Javier Dominguez Suarez <javids.jd@gmail.com>
+Subject: Francisco Javier Dominguez Suarez
+Content-Type: application/pkcs7-mime; name="smime.p7m"; smime-type=enveloped-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7m"
+Content-Description: Mensaje cifrado S/MIME
+
+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
+N64AAAAAAAAAAAAA
