@@ -297,13 +297,33 @@ Comenzamos generando la clave privada con el comando **genkey**<br>
 
 ![Clave Privada](Parte%201/Parte%201.3%20a.1.png)
 
-Aquí podemos ver el contenido del fichero clave_privada.pem
-```
-cat clave_privada.pem
-```
-![Clave Privada](Parte%201/cat%20clave_privada.png)
+Seguidamente se extraerá la clave pública del fichero recién generado con el comando **pkey**.
 
-Seguidamente se extraerá la clave pública del fichero recién generado 
+![Clave Pública](Parte%201/Parte%201.3%20a.2.png)
+
+A continuación exportaremos las claves ya generadas desde formato textual (PEM) a formato binario (DER). Usaremos el comando **pkey** del openssl.
+
+![Claves binarias](Parte%201/Parte%201.3%20b.1.png)
+
+Para verificar que la conversión ha sido correcta, convertiremos los ficheros DER a PEM.
+
+![Claves textual convertidas](Parte%201/Parte%201.3%20b.2.png)
+
+Una vez se han generado las claves asimétricas se procederá a firmar y encriptar un resumen de un fichero. Para ello usaremos el fichero **ili.txt** utilizado en los apartados anteriores. Para realizar el resumen usaremos el comando **dgst**.
+
+![Generación de resumen y verificación](Parte%201/Parte%201.3%20c.png)
+
+Como se puede ver en la imagen, la verificación es correcta por lo que el cifrado y firmado con las claves generadas fue un éxito.
+
+A continuación generaremos dos claves de tipo **DH** con **curva elíptica X22519**. Para empezar, generaremos un conjunto de parámetros **Diffie-Hellman** mediante el comando **genpkey**.
+
+![Parámetros DH](Parte%201/Parte%201.3%20d.1.png)
+
+A partir de dicho conjunto generaremos la clave privada y extraeremos la clave pública de la misma.
+
+![Claves DH](Parte%201/Parte%201.3%20d.2.png)
+
+
 
 #
 
