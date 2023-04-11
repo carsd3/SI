@@ -11,7 +11,7 @@ En esta práctica se va a profundizar en los conceptos de la Seguridad en la Inf
 
 En esta primera parte se utilizarán los distintos comandos del openssl para el **cifrado y resumen de ficheros y la generación de claves**.
 
-## Parte 1.1 Generación y comprobación de Resúmenes
+## Parte 1.1 - Generación y comprobación de Resúmenes
 Una vez entendido el empleo del comando openssl-dgst y sus opciones básicas:
 - Crear un archivo de texto legible de entre 150 y 200 caracteres
 - Aplicar un mínimo de CINCO algoritmos de resumen (SHA-1 y SHA-2 obligatorios) sobre
@@ -143,7 +143,7 @@ Como podemos comprobar, al modificar alguno de los caracteres de los ficheros lo
 ![Resúmenes modificados](Parte%201/1.1%20parte%202.png)
 *Resúmenes modificados*
 
-## 1.2 Cifrado Simétrico de documentos
+## 1.2 - Cifrado Simétrico de documentos
 Una vez entendido el empleo del comando openssl-enc para cifrar y descifrar, con diferentes
 algoritmos y modos de operación, el empleo de ficheros binarios y BASE64, la obtención de claves
 de contraseñas detallada en el estándar PKCS #5 (PBKDF1 y PBKDF2) y su aplicación a las claves
@@ -283,7 +283,7 @@ Una vez hemos generado todos los ficheros cifrados podremos comparar el peso de 
 ![Parte 1.2](Parte%201/Parte%201.2.png)
 
 
-## 1.3 Generación de claves asimétricas (pública-privada) y firmado de resúmenes
+## 1.3 - Generación de claves asimétricas (pública-privada) y firmado de resúmenes
 - Generar un par de claves asimétricas RSA de 2048 bits.
 - Exportar dicho par de claves (pública y privada) en formato PEM (textual) y DER (binario). Utilizar los comandos de conversión de PEM a DER y viceversa.
 - Con los dos pares de claves asimétricas creadas, firmar y comprobar la firma del resumen (con SHA-256) de un fichero de texto del apartado anterior.
@@ -315,19 +315,126 @@ Una vez se han generado las claves asimétricas se procederá a firmar y encript
 
 Como se puede ver en la imagen, la verificación es correcta por lo que el cifrado y firmado con las claves generadas fue un éxito.
 
-A continuación generaremos dos claves de tipo **DH** con **curva elíptica X22519**. Para empezar, generaremos un conjunto de parámetros **Diffie-Hellman** mediante el comando **genpkey**.
+A continuación generaremos dos claves de tipo **DH** con **curva elíptica X22519**. Para empezar, generaremos dos pares de claves asimétricas mediante los comandos **genpkey** y **pkey**. El primero lo denominaremos como **k1** y al segundo par **k2**.
 
-![Parámetros DH](Parte%201/Parte%201.3%20d.1.png)
+![Generación de claves algoritmo X25519](Parte%201/Parte%201.3%20d.1.png)
 
-A partir de dicho conjunto generaremos la clave privada y extraeremos la clave pública de la misma.
+La finalidad de generar estos dos pares de claves es comprobar que el secreto que se puede derivar de la clave 1 privada con la clave 2 pública es el mismo que el que se genera con la clave 2 privada y la clave 1 pública. Para ello usaremos el comando **pkeyutl** y el parámetro **derive**. 
 
-![Claves DH](Parte%201/Parte%201.3%20d.2.png)
+![Generación de secretos y comprobación](Parte%201/Parte%201.3%20d.2.png)
 
+Para comprobar que ambos ficheros generados son idénticos se ha usado el comando **cmp**, ya que al no mostrar ningún resultado implica que ambos ficheros no tienen ninguna discrepancia en su contenido.
 
+## 1.4 - Cifrado Asimétrico de documentos
 
+En este apartado vamos a reproducir en una secuencia de operaciones el intercambio de información segura entre dos agentes utilizando cifrado simétrico, cifrado asimétrico de las claves simétricas y firma digital (cifrado asimétrico de un resumen del documento original). Para ello, generaremos dos parejas de claves RSA que serán utilizadas por dos agentes (Ana y Berto) de forma que Ana construirá tres ficheros de texto a partir del fichero de texto original, el primero con el fichero cifrado, el segundo con las claves utilizadas y el tercero con la firma digital. Así, primero generaremos las dos claves:
+- Generar una pareja de claves RSA en ficheros anapub.pem y anapriv.pem y otra pareja de claves del mismo tipo bertopub.pem y bertopriv.pem.
+- Proteger ambas claves privadas con contraseña “anak” y “bertok” respectivamente. Se supone que Ana y Berto han intercambiado sus claves públicas. 
+
+A continuación, realizaremos el trabajo de Ana:
+- Cifrar un fichero de texto mensaje.txt de los apartados anteriores con AES-256 en modo CBC, con clave y vector escogidos por el estudiante y sin sal, con salida en formato BASE4 a un fichero llamado cifrado.txt.
+- Crear un fichero binario con la concatenación de la clave y el vector utilizados, de nombre claves.txt y cifrarlo con la clave pública bertopub.pem, con salida en formato binario a un fichero claves.bin
+- Convertir claves.bin a claves.txt en formato BASE64 (mediante openssl enc -a …)
+- Obtener un resumen sha256 del fichero de texto original y firmarlo (es decir, cifrarlo con la clave privada anapriv.pem -clave anak-), con salida en formato BASE64 a un fichero llamado firma.txt.
+
+En este momento, Ana enviaría los tres ficheros obtenidos cifrado.txt, claves.txt y firma.txt (junto a la meta-información relativa a los algoritmos utilizados, cómo se concatenan clave y vector…) a Berto… que seremos nosotros mismos. Actuando como Berto, procederemos a:
+
+- Convertir el fichero claves.txt a fichero binario claves2.bin con openssl enc -a…
+- Descifrar el fichero claves2.bin con la clave privada bertopriv.pem (contraseña bertok) y salida a un fichero claves2.txt (debería ser idéntico a claves.txt).
+- Extraer de claves2.txt la clave y el vector en formato hexadecimal, siguiendo la metainformación que le envió Ana junto con los tres ficheros.
+- Descifrar el fichero cifrado.txt con la clave y el vector obtenidos y salida al fichero mensaje2.txt (que debería ser igual al fichero original mensaje.txt utilizado por Ana).
+- Verificar que el fichero firma.txt con la clave pública de Ana, anapub.pem coincide con un resumen sha256 del fichero mensaje2.txt.
+
+Para empezar generamos los pares de claves para Ana y Berto respectivamente:
+
+![Claves ana](Parte%201/Parte%201.4/claves%20ana.png)
+![Claves berto](Parte%201/Parte%201.4/claves%20berto.png)
+
+A continuación, actuaremos en el papel de Ana. Para ello cifraremos el fichero que hemos usado en apartados anteriores como **cifrado.txt** con el algoritmo **AES_256** en modo **CBC**.
+
+![Cifrado de texto](Parte%201/Parte%201.4/cifrado.png)
+
+Seguidamente crearemos un fichero con la concatenación de la clave y vector del fichero cifrado y lo pasaremos a formato binario cifrado con la clave pública de Berto.
+
+![Claves formato bin](Parte%201/Parte%201.4/claves%20bin.png)
+
+Y posteriormente lo volveremos a cambiar en formato BASE64 a txt con el comando **enc**.
+
+![Clave de bin a txt](Parte%201/Parte%201.4/clave%20bin%20a%20txt.png)
+
+Finalmente generamos un resumen del fichero original y lo firmaremos con la clave privada de Ana.
+
+![Resumen firmado](Parte%201/Parte%201.4/resumen%20encriptado.png)
+
+Y con esto terminamos con la participación de Ana. A continuación seguiremos con la parte de Berto en la que descifraremos el intercambio de datos cifrados.
+
+La primera acción que tomaremos como Berto será convertir de vuelta el fichero claves.txt a formato binario.
+
+![Claves de bin a txt 2](Parte%201/Parte%201.4/clave%20bin%20a%20txt%20berto.png)
+
+Posteriormente descifraremos el fichero **claves2.bin** usando la clave privada **bertopriv.pem** y el comando **pkeyutl**.
+
+![Descifrar claves2.bin](Parte%201/Parte%201.4/descifrar%20claves2.png)
+
+Como podemos comprobar, el fichero generado es idéntico al claves.txt generado anteriormente por Ana.
+
+A continuación extraemos del fichero claves2.txt el vector de inicialización y la clave. 
+
+![IV y Clave](Parte%201/Parte%201.4/iv%20y%20clave.png)
+
+Con esta información podemos intentar descifrar el fichero **cifrado.txt** que ha pasado Ana.
+
+![Descifrado cifrado.txt](Parte%201/Parte%201.4/decrypt%20cifrado.png)
+
+Como último paso, para verificar que todo este proceso se ha realizado correctamente compararemos el resumen del fichero recién descifrado con el fichero firma.txt enviado por Ana y firmado con la clave pública de Ana.
+
+![Verificación](Parte%201/Parte%201.4/verification.png)
 #
 
 # Parte 2
-## Parte 2.1
+En esta parte de la práctica se pretende que el estudiante domine el manejo y la estructura de correos
+electrónicos seguros con el estándar S/MIME, primero como usuario final (utilizando agentes de
+correo electrónico convencionales) y seguidamente el análisis y la generación de este tipo de mensajes
+de correo electrónico seguro desde línea de comandos.
+Para ello:
+
+- El estudiante previamente ha de crear un certificado X.509 y firmarlo con el certificado de Autoridad disponible en la página de la asignatura
+- Instalar ambos certificados (usuario y autoridad) en un cliente de correo Thunderbird (versión 100 o superior) y enviar un mensaje firmado y cifrado a la dirección de un compañero de la asignatura, cuyo certificado ha de ser previamente importado en el cliente de correo, después de recibir un mensaje firmado de ese compañero.
+- Una vez recibido el correo firmado y cifrado, hemos de decodificar manualmente, con la ayuda
+de la utilidad “openssl smime” el texto del mensaje recibido, empleando nuestro certificado original
+(con la clave privada) y el certificado del compañero.
+
+## 2.1 - Creación de nuestro certificado temporal
+En este apartado se nos pide **generar nuestro certificado personal** a partir de un certificado raíz que tendremos que descargar de la página de la asignatura.
+- a) Descargar certificadoRaiz.crt y certificadoRaiz.key de la página de la asignatura
+
+    Descargamos desde la página de la asignatura los ficheros **certificadoRaiz.crt** y **certificadoRaiz.key**. 
+    ![Comprobación de certificados](Parte%202/fich.png)
+
+- b) Crear la clave de nuestro certificado (openssl genpkey ...) certificadoPersonal.key
+
+    Haciendo uso del comando **genpkey** generamos la clave de nuestro certificado.
+    ![Generación de clave personal](Parte%202/Parte%202.1.2%20b.png)
+
+- c) Crear el CSR de nuestro certificado (openssl req –new ...) certificadoPersonal.csr
+    
+    En este caso haremos uso del comando **req** para generar nuestro certificado. Como podremos comprobar en la figura inmediatamente inferior hemos rellenado los datos que se nos solicita con nuestra información personal, además de introducir la contraseña de nuestro certificado que será *hola11*.
+    ![Creación CSR](Parte%202/Parte%202.1.2%20c.png)
+
+- d) Crear nuestro certificado personal a partir del CSR, el certificado raíz y su clave, para ello habrá que introducir la contraseña SEGURIDAD que protege la clave de la raíz, el comando será del tipo (openssl x509 –req –days 365 ...) certificadoPersonal.crt
+
+    Usamos el comando **x509** para crear con toda la información descargada y generada nuestro certificado personal. Para ello tendremos que hacer uso de los ficheros correspondientes al certificado Raíz e introducir la contraseña SEGURIDAD proporcionada por el enunciado.
+    ![Creación certificado personal](Parte%202/Parte%202.1.2%20d.png)
+
+    Una vez hayamos generado nuestro certificado personal, podremos verificarlo con el comando **verify** para comprobar que el proceso es correcto.
+
+    ![Validación](Parte%202/Parte%202.1.2%20d%20(verificar).png)
+
+- e) El último apartado de la Wiki, 6.6: PEM a PKCS#12 explica cómo crear un  fichero “inter.p12” a partir de certificadoIntermedio.crt y certificadoIntermedio.key, tendremos que hacer un comando similar, cambiando “Intermedio” por “Personal” para crear un fichero llamado certificadoPersonal.p12. Atención: el comando nos pedirá la clave que protege certificadoPersonal y a continuación otra clave (podría ser la misma) para proteger el fichero de salida, certificadoPersonal.p12. El comando será del tipo (openssl pkcs12 export ………) certificadoPersonal.p12
+
+    Usando el comando **pkcs12** podremos generar un fichero de formato .p12 para     poder importarlo en el cliente de Mozilla Thunderbird.
+    ![Generar fichero .p12](Parte%202/Parte%202.1.2%20e.png)
+
+## 2.2 - Instalación de los certificados en el cliente de correo e intercambio de certificados y correo firmado y cifrado con otro compañero
 
 #
