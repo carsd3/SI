@@ -406,22 +406,22 @@ de la utilidad “openssl smime” el texto del mensaje recibido, empleando nues
 
 ## 2.1 - Creación de nuestro certificado temporal
 En este apartado se nos pide **generar nuestro certificado personal** a partir de un certificado raíz que tendremos que descargar de la página de la asignatura.
-- a) Descargar certificadoRaiz.crt y certificadoRaiz.key de la página de la asignatura
+- Descargar certificadoRaiz.crt y certificadoRaiz.key de la página de la asignatura
 
     Descargamos desde la página de la asignatura los ficheros **certificadoRaiz.crt** y **certificadoRaiz.key**. 
     ![Comprobación de certificados](Parte%202/fich.png)
 
-- b) Crear la clave de nuestro certificado (openssl genpkey ...) certificadoPersonal.key
+- Crear la clave de nuestro certificado (openssl genpkey ...) certificadoPersonal.key
 
     Haciendo uso del comando **genpkey** generamos la clave de nuestro certificado.
     ![Generación de clave personal](Parte%202/Parte%202.1.2%20b.png)
 
-- c) Crear el CSR de nuestro certificado (openssl req –new ...) certificadoPersonal.csr
+- Crear el CSR de nuestro certificado (openssl req –new ...) certificadoPersonal.csr
     
     En este caso haremos uso del comando **req** para generar nuestro certificado. Como podremos comprobar en la figura inmediatamente inferior hemos rellenado los datos que se nos solicita con nuestra información personal, además de introducir la contraseña de nuestro certificado que será *hola11*.
     ![Creación CSR](Parte%202/Parte%202.1.2%20c.png)
 
-- d) Crear nuestro certificado personal a partir del CSR, el certificado raíz y su clave, para ello habrá que introducir la contraseña SEGURIDAD que protege la clave de la raíz, el comando será del tipo (openssl x509 –req –days 365 ...) certificadoPersonal.crt
+- Crear nuestro certificado personal a partir del CSR, el certificado raíz y su clave, para ello habrá que introducir la contraseña SEGURIDAD que protege la clave de la raíz, el comando será del tipo (openssl x509 –req –days 365 ...) certificadoPersonal.crt
 
     Usamos el comando **x509** para crear con toda la información descargada y generada nuestro certificado personal. Para ello tendremos que hacer uso de los ficheros correspondientes al certificado Raíz e introducir la contraseña SEGURIDAD proporcionada por el enunciado.
     ![Creación certificado personal](Parte%202/Parte%202.1.2%20d.png)
@@ -430,11 +430,28 @@ En este apartado se nos pide **generar nuestro certificado personal** a partir d
 
     ![Validación](Parte%202/Parte%202.1.2%20d%20(verificar).png)
 
-- e) El último apartado de la Wiki, 6.6: PEM a PKCS#12 explica cómo crear un  fichero “inter.p12” a partir de certificadoIntermedio.crt y certificadoIntermedio.key, tendremos que hacer un comando similar, cambiando “Intermedio” por “Personal” para crear un fichero llamado certificadoPersonal.p12. Atención: el comando nos pedirá la clave que protege certificadoPersonal y a continuación otra clave (podría ser la misma) para proteger el fichero de salida, certificadoPersonal.p12. El comando será del tipo (openssl pkcs12 export ………) certificadoPersonal.p12
+- El último apartado de la Wiki, 6.6: PEM a PKCS#12 explica cómo crear un  fichero “inter.p12” a partir de certificadoIntermedio.crt y certificadoIntermedio.key, tendremos que hacer un comando similar, cambiando “Intermedio” por “Personal” para crear un fichero llamado certificadoPersonal.p12. Atención: el comando nos pedirá la clave que protege certificadoPersonal y a continuación otra clave (podría ser la misma) para proteger el fichero de salida, certificadoPersonal.p12. El comando será del tipo (openssl pkcs12 export ………) certificadoPersonal.p12
 
     Usando el comando **pkcs12** podremos generar un fichero de formato .p12 para     poder importarlo en el cliente de Mozilla Thunderbird.
     ![Generar fichero .p12](Parte%202/Parte%202.1.2%20e.png)
 
 ## 2.2 - Instalación de los certificados en el cliente de correo e intercambio de certificados y correo firmado y cifrado con otro compañero
 
+- Una vez creado nuestro certificado digital, hemos de configurar el cliente de correo electrónico Mozilla Thunderbird para que pueda firmar y cifrar mensajes con dicho certificado.
+
+  Lo primero que se tendrá que hacer será importar el **certificado raíz** que hemos descargado de la página de la asignatura. Para ello habrá que dirigirse al apartado de **Configuración de la Cuenta** y seleccionar **Administrar certificados S/MIME** en la pestaña de cifrado de extremo a extremo
+
+  ![Configuración del cliente certificado raíz](Parte%202/Parte%202.2.2%20(certificado%20raiz).png)
+  ![Configuración del cliente certificado personal](Parte%202/Parte%202.2.2%20(certificado%20personal).png)
+
+- En este cliente de correo electrónico hemos de instalar tanto la parte pública del certificado raíz (fichero certificadoRaiz.crt), como nuestro certificado personal completo (fichero certificadoPersonal.p12) con la contraseña que le pusimos.
+
+
+- Con ambos certificados ya instalados, hay que configurar nuestra cuenta de correo electrónico para que utilice nuestro certificado personal.
+
+
+- Una vez configurado e instalado el certificado, podremos FIRMAR los mensajes que enviemos, pero para cifrar correo hacia un destinatario, es necesario disponer previamente de SU certificado personal.
+
+
+- Enviar un mensaje con las opciones de firmado y cifrado activadas. 
 #
