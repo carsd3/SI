@@ -439,13 +439,14 @@ En este apartado se nos pide **generar nuestro certificado personal** a partir d
 
 - Una vez creado nuestro certificado digital, hemos de configurar el cliente de correo electrónico Mozilla Thunderbird para que pueda firmar y cifrar mensajes con dicho certificado.
 
+  Para ello se tendrá que ingresar el correo electrónico correspondiente (en este caso se ha escogido utilizar un correo electrónico personal) en el apartado de **Configuración de la cuenta** y 
+
+- En este cliente de correo electrónico hemos de instalar tanto la parte pública del certificado raíz (fichero certificadoRaiz.crt), como nuestro certificado personal completo (fichero certificadoPersonal.p12) con la contraseña que le pusimos.
+
   Lo primero que se tendrá que hacer será importar el **certificado raíz** que hemos descargado de la página de la asignatura. Para ello habrá que dirigirse al apartado de **Configuración de la Cuenta** y seleccionar **Administrar certificados S/MIME** en la pestaña de cifrado de extremo a extremo
 
   ![Configuración del cliente certificado raíz](Parte%202/Parte%202.2.2%20(certificado%20raiz).png)
   ![Configuración del cliente certificado personal](Parte%202/Parte%202.2.2%20(certificado%20personal).png)
-
-- En este cliente de correo electrónico hemos de instalar tanto la parte pública del certificado raíz (fichero certificadoRaiz.crt), como nuestro certificado personal completo (fichero certificadoPersonal.p12) con la contraseña que le pusimos.
-
 
 - Con ambos certificados ya instalados, hay que configurar nuestra cuenta de correo electrónico para que utilice nuestro certificado personal.
 
